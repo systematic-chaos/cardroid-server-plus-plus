@@ -1,0 +1,49 @@
+# Set the Glacier2 instance name
+Glacier2.InstanceName = CardroidGlacier2
+
+# The client-visible endpoint of Glacier2. This should be an endpoint 
+# visible from the public Internet, and it should be secure
+Glacier2.Client.Endpoints = ssl -h 192.168.1.101 -p 4063
+
+# The server-visible endpoint of Glacier2. This endpoint is only 
+# required if callbacks are needed (leave empty otherwise). This 
+# should be an endpoint on an interval network (like 192.168.x.x), or 
+# on the loopback, so that the server is not directly accessible from 
+# the Internet
+Glacier2.Server.Endpoints = tcp -h localhost
+
+# The proxy of the session manager
+Glacier2.SessionManager = CardroidSessionManager : tcp -h localhost -p 4064
+
+# We use a custom permissions verifier collocated with 
+# the session manager
+Glacier2.PermissionsVerifier = CardroidSessionVerifier : tcp -h localhost -p 4064
+
+# The timeout for inactive sessions. If any client is inactive 
+# for longer than this value, the session expires and is removed. The 
+# unit is in seconds
+Glacier2.SessionTimeout = 240
+
+#
+# Security Tracing
+#
+# 0 = no security tracing
+# 1 = trace messages
+#
+IceSSL.Trace.Security = 1
+
+# SSL Configuration
+Ice.Plugin.IceSSL = IceSSL:createIceSSL
+IceSSL.DefaultDir = certs
+IceSSL.CertAuthFile = ca_cert.pem
+IceSSL.CertFile = server_cert.pem
+IceSSL.KeyFile = server_key.pem
+IceSSL.Password = password
+IceSSL.VerifyPeer = 2
+IceSSL.TrustOnly.Server = C = ES, ST = Castilla-La Mancha, L = Ciudad Real, O = UCLM, OU = ESI, CN = Cardroid
+
+# IceMX configuration
+Ice.Admin.Endpoints = tcp -h localhost -p 5556
+Ice.Admin.InstanceName = CardroidGlacier2router
+IceMX.Metrics.Debug.GroupBy = id
+IceMX.Metrics.ByParent.GroupBy = parent

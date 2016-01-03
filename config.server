@@ -1,0 +1,81 @@
+# The endpoint of the session server's object adapter. This should be
+# and endpoint on an internal network (like 192.168.x.x), or of the 
+# loopback, so that the session server is nos directly accessible from 
+# the Internet
+CardroidServer.Endpoints = tcp -h localhost -p 4064
+CardroidRegistration.Endpoints = ssl -h 192.168.1.101 -p 6535
+
+# Whether the server will accept the establishment of direct connections from 
+# clients running on platforms unable to use the Glacier2 technology
+SessionFactory = 0
+
+# The endpoints used by the IceStorm topic manager
+TopicManager.Proxy = CardroidIceStorm/TopicManager : tcp -h localhost -p 6536
+
+# Oracle configuration
+Oracle.Username = cardroid
+Oracle.Password = x4OpUoo9KBR1o
+Oracle.ConnectString = localhost:1521/orcl
+
+# The number of connections in the Oracle connection pool. This number 
+# should be at least as big as the number of threads in the server's 
+# thread pool
+Oracle.NumConnections = 16
+
+# Number of threads in the server-side dispatch thread pool
+Ice.ThreadPool.Server.Size = 16
+
+# How long to keep sessions alive with no activity. It is best to use 
+# the same value as in config.glacier2
+SessionTimeout = 240
+
+# Warn about connection exceptions
+Ice.Warn.Connections = 1
+
+#
+# Network Tracing
+#
+# 0 = no network tracing
+# 1 = trace connection establishment and closure
+# 2 = like 1, but more detailed
+# 3 = like 2, but also trace data transfer
+#
+Ice.Trace.Network = 3
+
+#
+# Protocol Tracing
+#
+# 0 = no protocol tracing
+# 1 = trace protocol messages
+#
+Ice.Trace.Protocol = 1
+
+#
+# Security Tracing
+#
+# 0 = no security tracing
+# 1 = trace messages
+#
+IceSSL.Trace.Security = 1
+
+#
+# SSL Configuration
+#
+Ice.Plugin.IceSSL = IceSSL:createIceSSL
+IceSSL.VerifyPeer = 2
+IceSSL.DefaultDir = certs
+IceSSL.CertAuthFile = ca_cert.pem
+IceSSL.CertFile = server_cert.pem
+IceSSL.KeyFile = server_key.pem
+IceSSL.Password = password
+Ice.InitPlugins = 0
+IceSSL.TrustOnly.Server = C = ES, ST = Castilla-La Mancha, L = Ciudad Real, O = UCLM, OU = ESI, CN = Cardroid
+
+# IceMX configuration
+Ice.Admin.Endpoints = tcp -h localhost -p 5555
+Ice.Admin.InstanceName = CardroidServer
+IceMX.Metrics.Debug.GroupBy = id
+IceMX.Metrics.ByParent.GroupBy = parent
+
+# Slice format
+Ice.Default.SlicedFormat = 1
